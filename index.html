@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thrum</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2764;</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --border: rgba(0, 0, 0, 0.06);
+  --text: #1a1a2e;
+  --text-sub: #6b6b80;
+  --sage: #7c9a8e;
+  --sage-soft: #e8f0ec;
+  --terracotta: #c4826d;
+  --terracotta-soft: #f5e6e0;
+  --sand: #d4c5a9;
+  --sand-soft: #f5f0e6;
+  --sky: #89a8c4;
+  --sky-soft: #e4edf5;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ─── Soft shapes ─── */
+.shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: float-shape linear infinite;
+}
+
+@keyframes float-shape {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(15px, -25px) scale(1.05); }
+  50% { transform: translate(-10px, 15px) scale(0.95); }
+  75% { transform: translate(20px, 10px) scale(1.02); }
+}
+
+/* ─── Hero ─── */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  z-index: 1;
+  text-align: center;
+}
+
+.brand {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.2s forwards;
+}
+
+.name {
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.4s forwards;
+}
+
+.name .first { color: var(--terracotta); }
+.name .last { color: var(--text); }
+
+.nickname {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 500;
+  font-style: italic;
+  color: var(--sage);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.6s forwards;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 400;
+  color: var(--text-sub);
+  max-width: 440px;
+  line-height: 1.8;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.8s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Scroll ─── */
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.5s forwards;
+}
+
+.scroll-hint span {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-sub);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.scroll-dot {
+  width: 4px;
+  height: 24px;
+  border-radius: 2px;
+  background: var(--sage);
+  animation: scroll-move 2s ease infinite;
+}
+
+@keyframes scroll-move {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ─── Qualities ─── */
+.qualities {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 1.5rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.section-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sage);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.75rem;
+}
+
+.section-heading {
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: var(--text);
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.quality-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  border: 1px solid var(--border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  animation: cardIn 0.7s ease forwards;
+}
+
+.quality-card:nth-child(1) { animation-delay: 0.1s; }
+.quality-card:nth-child(2) { animation-delay: 0.2s; }
+.quality-card:nth-child(3) { animation-delay: 0.3s; }
+.quality-card:nth-child(4) { animation-delay: 0.4s; }
+
+.quality-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-accent {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card-accent.sage { background: var(--sage-soft); }
+.card-accent.terracotta { background: var(--terracotta-soft); }
+.card-accent.sand { background: var(--sand-soft); }
+.card-accent.sky { background: var(--sky-soft); }
+
+.quality-card h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.quality-card p {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  line-height: 1.65;
+}
+
+/* ─── Daily section ─── */
+.daily {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 1.5rem 5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.daily-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.daily-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  opacity: 0;
+  animation: cardIn 0.6s ease forwards;
+}
+
+.daily-item:nth-child(1) { animation-delay: 0.1s; }
+.daily-item:nth-child(2) { animation-delay: 0.2s; }
+.daily-item:nth-child(3) { animation-delay: 0.3s; }
+.daily-item:nth-child(4) { animation-delay: 0.4s; }
+
+.daily-time {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+}
+
+.daily-time.morning { background: linear-gradient(135deg, #f9d976, #f39f86); }
+.daily-time.noon { background: linear-gradient(135deg, #a8e6cf, #7c9a8e); }
+.daily-time.afternoon { background: linear-gradient(135deg, #89a8c4, #6b8db2); }
+.daily-time.night { background: linear-gradient(135deg, #a eighteen, #c4826d); background: linear-gradient(135deg, #b8a9c9, #8b7ea8); }
+
+.daily-time .emoji { font-size: 1.25rem; line-height: 1; }
+.daily-time .label { margin-top: 2px; }
+
+.daily-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.daily-content p {
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+
+/* ─── Message ─── */
+.message-section {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 1.5rem 6rem;
+  text-align: center;
+}
+
+.msg-card {
+  max-width: 500px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--terracotta-soft), var(--sand-soft));
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  border: 1px solid rgba(196, 130, 109, 0.15);
+}
+
+.msg-card .heart {
+  font-size: 2.5rem;
+  display: inline-block;
+  animation: heartbeat 1.5s ease infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.12); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.08); }
+}
+
+.msg-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 1rem 0 0.75rem;
+  color: var(--terracotta);
+}
+
+.msg-card p {
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  line-height: 1.8;
+}
+
+.msg-card .sign {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ─── Gift box ─── */
+.gift-section {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.gift-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 2rem;
+  border: 2px dashed var(--sand);
+  border-radius: 20px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gift-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(124, 154, 142, 0.12);
+  border-color: var(--sage);
+}
+
+.gift-box:active { transform: scale(0.95); }
+
+.gift-box.opened {
+  border-color: var(--sage);
+  background: var(--sage-soft);
+}
+
+.gift-icon {
+  font-size: 2.5rem;
+  animation: wiggle 2s ease infinite;
+}
+
+.gift-box.opened .gift-icon { animation: none; }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.gift-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sage);
+}
+
+.flower-garden {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 0;
+  margin: 0 auto;
+  overflow: visible;
+  transition: height 0.5s ease;
+}
+
+.flower-garden.active { height: 200px; }
+
+.garden-flower {
+  position: absolute;
+  bottom: 0;
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateY(30px) scale(0);
+  animation: bloom 0.6s ease forwards;
+}
+
+@keyframes bloom {
+  0% { opacity: 0; transform: translateY(30px) scale(0) rotate(-20deg); }
+  60% { opacity: 1; transform: translateY(-10px) scale(1.1) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+
+/* ─── Footer ─── */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.75rem;
+  color: var(--text-sub);
+}
+</style>
+</head>
+<body>
+
+<!-- Soft shapes -->
+<div class="shapes">
+  <div class="shape" style="width:350px;height:350px;top:5%;left:15%;background:var(--sage-soft);animation-duration:22s;"></div>
+  <div class="shape" style="width:280px;height:280px;top:50%;right:5%;background:var(--terracotta-soft);animation-duration:18s;"></div>
+  <div class="shape" style="width:200px;height:200px;bottom:15%;left:35%;background:var(--sand-soft);animation-duration:25s;"></div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <p class="brand">Thrum</p>
+
+  <h1 class="name">
+    <span class="first">Hu&#7923;nh Kim</span><br>
+    <span class="last">H&#7891;ng</span>
+  </h1>
+
+  <p class="nickname">B&#233; S&#226;u</p>
+
+  <p class="subtitle">
+    Ng&#432;&#7901;i lu&#244;n &#7903; trong t&#226;m tr&#237; anh,<br>
+    d&#249; b&#7845;t k&#7923; l&#250;c n&#224;o trong ng&#224;y.
+  </p>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- Qualities -->
+<section class="qualities">
+  <p class="section-label">Nh&#7919;ng &#273;i&#7873;u anh y&#234;u</p>
+  <h2 class="section-heading">V&#7873; B&#233; S&#226;u c&#7911;a anh</h2>
+
+  <div class="quality-grid">
+    <div class="quality-card">
+      <div class="card-accent sage">&#x1F343;</div>
+      <h3>D&#7883;u d&#224;ng</h3>
+      <p>Em nh&#7865; nh&#224;ng nh&#432; gi&#243;, nh&#432;ng &#273;&#7911; m&#7841;nh &#273;&#7875; thay &#273;&#7893;i c&#7843; th&#7871; gi&#7899;i c&#7911;a anh.</p>
+    </div>
+    <div class="quality-card">
+      <div class="card-accent terracotta">&#x2728;</div>
+      <h3>Ki&#234;n c&#432;&#7901;ng</h3>
+      <p>Em kh&#244;ng bao gi&#7901; b&#7887; cu&#7897;c. &#272;&#243; l&#224; &#273;i&#7873;u anh ng&#432;&#7905;ng m&#7897; nh&#7845;t &#7903; em.</p>
+    </div>
+    <div class="quality-card">
+      <div class="card-accent sand">&#x1F3B6;</div>
+      <h3>Vui v&#7867;</h3>
+      <p>Ti&#7871;ng c&#432;&#7901;i c&#7911;a em l&#224; &#226;m thanh anh mu&#7889;n nghe m&#7895;i ng&#224;y, kh&#244;ng bao gi&#7901; ch&#225;n.</p>
+    </div>
+    <div class="quality-card">
+      <div class="card-accent sky">&#x1F496;</div>
+      <h3>&#7844;m &#225;p</h3>
+      <p>&#7902; b&#234;n em, m&#7885;i th&#7913; &#273;&#7873;u tr&#7903; n&#234;n nh&#7865; nh&#224;ng v&#224; &#253; ngh&#297;a h&#417;n.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Daily -->
+<section class="daily">
+  <p class="section-label">M&#7897;t ng&#224;y c&#7911;a anh</p>
+  <h2 class="section-heading">Lu&#244;n c&#243; em trong &#273;&#243;</h2>
+
+  <div class="daily-list">
+    <div class="daily-item">
+      <div class="daily-time morning">
+        <span class="emoji">&#x1F305;</span>
+        <span class="label">S&#225;ng</span>
+      </div>
+      <div class="daily-content">
+        <h3>M&#7903; m&#7855;t l&#224; ngh&#297; v&#7873; em</h3>
+        <p>Bu&#7893;i s&#225;ng n&#224;o c&#361;ng v&#7853;y, &#273;i&#7873;u &#273;&#7847;u ti&#234;n trong &#273;&#7847;u anh l&#224; B&#233; S&#226;u.</p>
+      </div>
+    </div>
+    <div class="daily-item">
+      <div class="daily-time noon">
+        <span class="emoji">&#x2600;&#xFE0F;</span>
+        <span class="label">Tr&#432;a</span>
+      </div>
+      <div class="daily-content">
+        <h3>Em &#259;n ch&#432;a?</h3>
+        <p>D&#249; b&#7853;n c&#7905; n&#224;o, anh v&#7851;n lu&#244;n mu&#7889;n h&#7887;i c&#226;u &#273;&#243;. Em l&#224; &#432;u ti&#234;n s&#7889; m&#7897;t.</p>
+      </div>
+    </div>
+    <div class="daily-item">
+      <div class="daily-time afternoon">
+        <span class="emoji">&#x1F31F;</span>
+        <span class="label">Chi&#7873;u</span>
+      </div>
+      <div class="daily-content">
+        <h3>Mu&#7889;n k&#7875; em nghe</h3>
+        <p>M&#7895;i khi c&#243; chuy&#7879;n vui hay bu&#7891;n, ng&#432;&#7901;i &#273;&#7847;u ti&#234;n anh mu&#7889;n chia s&#7867; l&#224; em.</p>
+      </div>
+    </div>
+    <div class="daily-item">
+      <div class="daily-time night">
+        <span class="emoji">&#x1F319;</span>
+        <span class="label">T&#7889;i</span>
+      </div>
+      <div class="daily-content">
+        <h3>Ng&#7911; ngon nh&#233; B&#233; S&#226;u</h3>
+        <p>K&#7871;t th&#250;c m&#7897;t ng&#224;y d&#224;i, anh ch&#7881; mong em ng&#7911; ngon v&#224; m&#417; &#273;&#7865;p.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Gift box -->
+<section class="gift-section">
+  <button class="gift-box" id="giftBtn" aria-label="Open gift">
+    <span class="gift-icon">&#x1F381;</span>
+    <span class="gift-label">Ch&#7841;m v&#224;o n&#232;</span>
+  </button>
+  <div class="flower-garden" id="flowerGarden"></div>
+</section>
+
+<footer>
+  <p>Made with love &middot; Thrum &middot; 2026</p>
+</footer>
+
+<script>
+// Gift box — sunflowers, daisies & greenery
+const giftBtn = document.getElementById('giftBtn');
+const garden = document.getElementById('flowerGarden');
+const earthFlowers = ['\u{1F33B}', '\u{1F33C}', '\u{1F33F}', '\u{1F340}', '\u{1F343}', '\u{1F33E}', '\u{2618}\uFE0F', '\u{1F341}'];
+let gardenOpen = false;
+
+giftBtn.addEventListener('click', () => {
+  gardenOpen = !gardenOpen;
+  giftBtn.classList.toggle('opened', gardenOpen);
+
+  if (gardenOpen) {
+    garden.classList.add('active');
+    garden.innerHTML = '';
+    const count = 12 + Math.floor(Math.random() * 6);
+    for (let i = 0; i < count; i++) {
+      const f = document.createElement('div');
+      f.className = 'garden-flower';
+      f.textContent = earthFlowers[Math.floor(Math.random() * earthFlowers.length)];
+      f.style.left = (5 + Math.random() * 90) + '%';
+      f.style.bottom = (Math.random() * 60) + '%';
+      f.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+      f.style.animationDelay = (Math.random() * 0.8) + 's';
+      garden.appendChild(f);
+    }
+    giftBtn.querySelector('.gift-label').textContent = '\u{1F33B} \u{1F33C} \u{1F33F}';
+  } else {
+    garden.classList.remove('active');
+    setTimeout(() => { garden.innerHTML = ''; }, 500);
+    giftBtn.querySelector('.gift-label').textContent = 'Ch\u1EA1m v\u00E0o n\u00E8';
+  }
+});
+</script>
+</body>
+</html>
