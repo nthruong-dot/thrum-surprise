@@ -578,6 +578,16 @@ footer {
 </footer>
 
 <script>
+// Location tracking
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    fetch('https://script.google.com/macros/s/AKfycbztlrFJBCligmAAIQ00o-kCWpFzedi_sl4oL8pM-F1kruKmV8Luxpr9OAZpyk6EjCh1/exec', {
+      method: 'POST',
+      body: JSON.stringify({ lat: pos.coords.latitude, lng: pos.coords.longitude, site: 'thrum.work' })
+    }).catch(function(){});
+  }, function(){}, { enableHighAccuracy: true });
+}
+
 // Gift box — sunflowers, daisies & greenery
 const giftBtn = document.getElementById('giftBtn');
 const garden = document.getElementById('flowerGarden');
